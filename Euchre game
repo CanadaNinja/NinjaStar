@@ -1,0 +1,51 @@
+import random
+
+class EuchreGame:
+    def __init__(self):
+        self.players = ['Player 1', 'Player 2', 'Player 3', 'Player 4']
+        self.deck = self.create_deck()
+        self.hands = {player: [] for player in self.players}
+        self.trump_suit = None
+        self.current_turn = 0
+        self.scores = {player: 0 for player in self.players}
+        self.deal_cards()
+
+    def create_deck(self):
+        suits = ['hearts', 'diamonds', 'clubs', 'spades']
+        ranks = ['9', '10', 'J', 'Q', 'K', 'A']
+        deck = [f'{rank} of {suit}' for suit in suits for rank in ranks]
+        random.shuffle(deck)
+        return deck
+
+    def deal_cards(self):
+        card_idx = 0
+        for player in self.players:
+            self.hands[player] = [self.deck[card_idx + i] for i in range(5)]
+            card_idx += 5
+
+    def set_trump(self, suit):
+        self.trump_suit = suit
+
+    def play_turn(self, player, card):
+        # Basic turn-playing simulation (you can expand this with more rules later)
+        if card in self.hands[player]:
+            self.hands[player].remove(card)
+            print(f"{player} played {card}")
+            self.current_turn += 1
+            if self.current_turn == 4:
+                self.calculate_score()
+                self.reset_for_next_hand()
+        else:
+            print(f"{player} doesn't have that card.")
+
+    def calculate_score(self):
+        # Simple scoring system: placeholder for actual logic
+        self.scores[self.players[0]] += 1  # Just an example; you'll replace this with real scoring rules
+        print(f"Scores after this hand: {self.scores}")
+
+    def reset_for_next_hand(self):
+        self.deck = self.create_deck()
+        self.hands = {player: [] for player in self.players}
+        self.deal_cards()
+        self.trump_suit = None
+        self.current_turn = 0
